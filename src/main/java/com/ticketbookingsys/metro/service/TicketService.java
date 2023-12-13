@@ -2,10 +2,9 @@ package com.ticketbookingsys.metro.service;
 
 import com.ticketbookingsys.metro.entity.Station;
 import com.ticketbookingsys.metro.entity.Ticket;
-import com.ticketbookingsys.metro.exception.AlreadyUsedTicket;
+import com.ticketbookingsys.metro.exception.AlreadyUsedTicketException;
 import com.ticketbookingsys.metro.exception.NotFoundException;
-import com.ticketbookingsys.metro.exception.NotUsedTicket;
-import com.ticketbookingsys.metro.repository.StationRepository;
+import com.ticketbookingsys.metro.exception.NotUsedTicketException;
 import com.ticketbookingsys.metro.repository.TicketRepository;
 import com.ticketbookingsys.metro.request.CreateTicketRequest;
 import com.ticketbookingsys.metro.utils.AppUtils;
@@ -45,7 +44,7 @@ public class TicketService {
         ticketOptional.ifPresentOrElse(
                 (ticket) -> {
                     if(ticket.isEntry()) {
-                        throw new AlreadyUsedTicket("ticket id " + ticketId + " is already used!");
+                        throw new AlreadyUsedTicketException("ticket id " + ticketId + " is already used!");
                     } else {
                         ticket.setEntry(true);
                         ticketRepository.save(ticket);
@@ -64,10 +63,10 @@ public class TicketService {
         ticketOptional.ifPresentOrElse(
                 (ticket) -> {
                     if(!ticket.isEntry()) {
-                        throw new NotUsedTicket("ticket id " + ticketId + " is not entered yet!");
+                        throw new NotUsedTicketException("ticket id " + ticketId + " is not entered yet!");
                     }
                     if(ticket.isExit()) {
-                        throw new AlreadyUsedTicket("ticket id " + ticketId + " is already used!");
+                        throw new AlreadyUsedTicketException("ticket id " + ticketId + " is already used!");
                     } else {
                         ticket.setExit(true);
                         ticketRepository.save(ticket);
@@ -81,10 +80,3 @@ public class TicketService {
     }
 
 }
-
-
-/*
-* maxTime and averageTime of Memory and CPU Utilisation => core, lineage, unity, items
-* Create and Update Lots and Pallets
-*
-* */
