@@ -17,5 +17,7 @@ public class Ticket {
     private String source;
     private String destination;
     private LocalDateTime localDateTime;
+    private boolean exit;
+    private boolean entry;
 
 }
