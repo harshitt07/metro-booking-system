@@ -4,11 +4,12 @@ import com.ticketbookingsys.metro.entity.Ticket;
 import com.ticketbookingsys.metro.request.CreateTicketRequest;
 import com.ticketbookingsys.metro.service.TicketService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class TicketController {
@@ -17,6 +18,7 @@ public class TicketController {
 
     @PostMapping("/buyTicket")
     public Ticket buyTickets(@RequestBody CreateTicketRequest createTicketRequest) throws Exception {
+        log.info("inside {} controller", TicketController.class);
         return ticketService.generateTicket(createTicketRequest);
     }
 }

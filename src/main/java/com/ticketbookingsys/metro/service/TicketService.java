@@ -7,10 +7,12 @@ import com.ticketbookingsys.metro.repository.TicketRepository;
 import com.ticketbookingsys.metro.request.CreateTicketRequest;
 import com.ticketbookingsys.metro.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TicketService {
@@ -19,6 +21,7 @@ public class TicketService {
     private final TicketRepository ticketRepository;
 
     public Ticket generateTicket(CreateTicketRequest createTicketRequest) throws Exception {
+        log.info("inside {} service", TicketService.class);
         Station sourceStation = appUtils.findStation(createTicketRequest.getSource());
         Station destinationStation = appUtils.findStation(createTicketRequest.getDestination());
         Ticket ticket = Ticket.builder()

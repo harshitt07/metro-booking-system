@@ -4,18 +4,21 @@ import com.ticketbookingsys.metro.entity.Station;
 import com.ticketbookingsys.metro.exception.NotFoundException;
 import com.ticketbookingsys.metro.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Slf4j
 @Component
+@RequiredArgsConstructor
 public class AppUtils {
-    @Autowired
-    private StationRepository stationRepository;
+
+    private final StationRepository stationRepository;
 
     public Station findStation(String stationName) throws NotFoundException {
+        log.info("inside {} utils", AppUtils.class);
         Optional<Station> sourceStation = stationRepository.findOne(Example.of(Station.builder().name(stationName).build()));
         return sourceStation.orElseThrow(() -> new NotFoundException(stationName + " doesn't exists"));
     }
