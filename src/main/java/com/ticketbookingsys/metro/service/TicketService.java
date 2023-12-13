@@ -2,7 +2,9 @@ package com.ticketbookingsys.metro.service;
 
 import com.ticketbookingsys.metro.entity.Station;
 import com.ticketbookingsys.metro.entity.Ticket;
-import com.ticketbookingsys.metro.repository.StationRepository;
+import com.ticketbookingsys.metro.exception.AlreadyUsedTicketException;
+import com.ticketbookingsys.metro.exception.NotFoundException;
+import com.ticketbookingsys.metro.exception.NotUsedTicketException;
 import com.ticketbookingsys.metro.repository.TicketRepository;
 import com.ticketbookingsys.metro.request.CreateTicketRequest;
 import com.ticketbookingsys.metro.utils.AppUtils;
@@ -11,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -29,8 +32,51 @@ public class TicketService {
                 .destination(createTicketRequest.getDestination())
                 .price(Math.abs(sourceStation.getPrice() - destinationStation.getPrice()))
                 .localDateTime(LocalDateTime.now())
+                .entry(false)
+                .exit(false)
                 .build();
         return ticketRepository.save(ticket);
+    }
+
+    public void updateEntry(String ticketId) throws Exception {
+        log.info("inside {} service", TicketService.class);
+        Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
+        ticketOptional.ifPresentOrElse(
+                (ticket) -> {
+                    if(ticket.isEntry()) {
+                        throw new AlreadyUsedTicketException("ticket id " + ticketId + " is already used!");
+                    } else {
+                        ticket.setEntry(true);
+                        ticketRepository.save(ticket);
+                    }
+                    log.info("Updated ticket with id : {}", ticketId);
+                },
+                () -> {
+                    throw new NotFoundException("ticket id " + ticketId + " doesn't exists!");
+                }
+        );
+    }
+
+    public void updateExit(String ticketId) throws Exception {
+        log.info("inside {} service", TicketService.class);
+        Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
+        ticketOptional.ifPresentOrElse(
+                (ticket) -> {
+                    if(!ticket.isEntry()) {
+                        throw new NotUsedTicketException("ticket id " + ticketId + " is not entered yet!");
+                    }
+                    if(ticket.isExit()) {
+                        throw new AlreadyUsedTicketException("ticket id " + ticketId + " is already used!");
+                    } else {
+                        ticket.setExit(true);
+                        ticketRepository.save(ticket);
+                    }
+                    log.info("Updated ticket with id : {}", ticketId);
+                },
+                () -> {
+                    throw new NotFoundException("ticket id " + ticketId + " doesn't exists!");
+                }
+        );
     }
 
 }
