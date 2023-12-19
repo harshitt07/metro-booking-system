@@ -1,5 +1,6 @@
 package com.ticketbookingsys.metro.service;
 
+import com.ticketbookingsys.metro.annotations.LogExecutionTime;
 import com.ticketbookingsys.metro.entity.Station;
 import com.ticketbookingsys.metro.exception.NotFoundException;
 import com.ticketbookingsys.metro.repository.StationRepository;
@@ -19,19 +20,19 @@ public class StationService {
 
     private final StationRepository stationRepository;
 
+    @LogExecutionTime
     public Station addStation(CreateStationRequest createStationRequest) {
-        log.info("inside {} service", StationService.class);
-        Station station = Station.builder().name(createStationRequest.getStationName()).price(createStationRequest.getPrice()).build();
+        Station station = Station.builder().name(createStationRequest.getStationName()).price(createStationRequest.getPrice()).stationType(createStationRequest.getStationType()).build();
         return stationRepository.save(station);
     }
 
+    @LogExecutionTime
     public List<Station> getAllStation() {
-        log.info("inside {} service", StationService.class);
         return stationRepository.findAll();
     }
 
+    @LogExecutionTime
     public void deleteStation(String stationName) throws Exception {
-        log.info("inside {} service", StationService.class);
         Optional<Station> station = stationRepository.findOne(Example.of(Station.builder()
                 .name(stationName)
                 .build()));

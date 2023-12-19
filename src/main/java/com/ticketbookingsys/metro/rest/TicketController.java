@@ -1,5 +1,7 @@
 package com.ticketbookingsys.metro.rest;
 
+import com.ticketbookingsys.metro.annotations.CustomLogExecution;
+import com.ticketbookingsys.metro.annotations.LogExecutionTime;
 import com.ticketbookingsys.metro.entity.Ticket;
 import com.ticketbookingsys.metro.request.CreateTicketRequest;
 import com.ticketbookingsys.metro.service.TicketService;
@@ -16,20 +18,23 @@ public class TicketController {
     private final TicketService ticketService;
 
     @PostMapping("/buyTicket")
+    @LogExecutionTime
+    @CustomLogExecution
     public Ticket buyTickets(@RequestBody CreateTicketRequest createTicketRequest) throws Exception {
-        log.info("inside {} controller", TicketController.class);
         return ticketService.generateTicket(createTicketRequest);
     }
 
     @PatchMapping("/updateEntry/{ticketId}")
+    @LogExecutionTime
+    @CustomLogExecution
     public void updateEntry(@PathVariable(name = "ticketId") String ticketId) throws Exception {
-        log.info("inside {} controller", StationController.class);
         ticketService.updateEntry(ticketId);
     }
 
     @PatchMapping("/updateExit/{ticketId}")
+    @LogExecutionTime
+    @CustomLogExecution
     public void updateExit(@PathVariable(name = "ticketId") String ticketId) throws Exception {
-        log.info("inside {} controller", StationController.class);
         ticketService.updateExit(ticketId);
     }
 
