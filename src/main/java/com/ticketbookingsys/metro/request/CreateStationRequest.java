@@ -1,5 +1,7 @@
 package com.ticketbookingsys.metro.request;
 
+import com.ticketbookingsys.metro.entity.STATION_TYPE;
+import com.ticketbookingsys.metro.entity.Station;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -18,4 +20,6 @@ public class CreateStationRequest {
 
     @Positive(message = "Price should be Positive!")
     Long price;
+
+    STATION_TYPE stationType;
 }

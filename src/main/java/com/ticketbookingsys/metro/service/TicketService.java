@@ -1,5 +1,6 @@
 package com.ticketbookingsys.metro.service;
 
+import com.ticketbookingsys.metro.annotations.LogExecutionTime;
 import com.ticketbookingsys.metro.entity.Station;
 import com.ticketbookingsys.metro.entity.Ticket;
 import com.ticketbookingsys.metro.exception.AlreadyUsedTicketException;
@@ -23,6 +24,7 @@ public class TicketService {
     private final AppUtils appUtils;
     private final TicketRepository ticketRepository;
 
+    @LogExecutionTime
     public Ticket generateTicket(CreateTicketRequest createTicketRequest) throws Exception {
         log.info("inside {} service", TicketService.class);
         Station sourceStation = appUtils.findStation(createTicketRequest.getSource());
@@ -38,6 +40,7 @@ public class TicketService {
         return ticketRepository.save(ticket);
     }
 
+    @LogExecutionTime
     public void updateEntry(String ticketId) throws Exception {
         log.info("inside {} service", TicketService.class);
         Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
@@ -57,6 +60,7 @@ public class TicketService {
         );
     }
 
+    @LogExecutionTime
     public void updateExit(String ticketId) throws Exception {
         log.info("inside {} service", TicketService.class);
         Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
